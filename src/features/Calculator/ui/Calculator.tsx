@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import clsx from 'clsx';
 import { Work_Sans } from 'next/font/google';
 import styles from './Calculator.module.scss';
@@ -24,6 +24,29 @@ const Calculator: React.FC = () => {
   const [lastOperator, setLastOperator] = useState('');
   const [actionDisplay, setActionDisplay] = useState('');
   const [lastInput, setLastInput] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Динамическое измеение размера шрифта
+  const displayRef = useRef<HTMLDivElement>(null);
+  const [fontSize, setFontSize] = useState(96);
+  useEffect(() => {
+    const resizeText = () => {
+      const container = displayRef.current;
+      if (!container) return;
+
+      const containerWidth = container.offsetWidth;
+      const textLength = input.length;
+
+      if (textLength > 6) {
+        const newFontSize = Math.min((containerWidth / textLength) * 1.5, 96);
+        setFontSize(newFontSize);
+      } else {
+        setFontSize(96);
+      }
+    };
+
+    resizeText();
+  }, [input]);
 
   const resetCalculator = useCallback(() => {
     setInput('0');
@@ -48,6 +71,7 @@ const Calculator: React.FC = () => {
 
   const handleButtonClick = useCallback(
     (value: string) => {
+      setErrorMessage(null);
       if (['+', '-', '*', '/'].includes(value)) {
         setOperator(value);
         setPreviousInput(input);
@@ -57,6 +81,13 @@ const Calculator: React.FC = () => {
       } else if (value === '=') {
         const currentOperator = operator || lastOperator;
         const currentInput = input || lastInput;
+
+        // Проверка на деление на ноль
+        if (currentOperator === '/' && currentInput === '0') {
+          setErrorMessage('Cannot be divided by zero');
+          resetCalculator();
+          return;
+        }
 
         if (previousInput && currentOperator && currentInput) {
           const result = calculateResult(
@@ -126,7 +157,17 @@ const Calculator: React.FC = () => {
   return (
     <div className={clsx(workSans.className, styles.calculator)}>
       <div className={styles.actionDisplay}>{actionDisplay}</div>
-      <div className={styles.display}>{formatNumber(input)}</div>
+      <div
+        className={styles.display}
+        ref={displayRef}
+        style={{ fontSize: `${fontSize}px` }}
+      >
+        {errorMessage ? (
+          <span className={styles.error}>{errorMessage}</span>
+        ) : (
+          formatNumber(input)
+        )}
+      </div>
       <div className={styles.buttonsGrid}>
         {calcKeys.map((symbol) => (
           <button

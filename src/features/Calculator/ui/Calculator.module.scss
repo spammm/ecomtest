@@ -15,11 +15,10 @@
     height: 47px;
     font-size: 40px;
     font-weight: 300;
-    line-height: 46.92px;
-    text-align: right;
+    line-height: 47px;
     color: $color-gray;
     text-align: right;
-    width: 100%;
+    width: 398px;
     margin-bottom: 16px;
   }
 
@@ -33,6 +32,17 @@
     margin-bottom: 20px;
     border: none;
     margin-bottom: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .error {
+      color: red;
+      font-size: 31px;
+      font-weight: 500;
+    }
   }
 
   .buttonsGrid {
