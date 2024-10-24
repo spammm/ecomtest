@@ -1,0 +1,20 @@
+@import '../../shared/options/variables.scss';
+
+.modal {
+  color: $color-black;
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24.2px;
+    text-align: left;
+    margin-bottom: 16px;
+  }
+  .input {
+    margin-bottom: 36px;
+  }
+  .buttonsContainer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+  }
+}

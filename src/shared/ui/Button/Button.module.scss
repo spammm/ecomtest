@@ -1,0 +1,42 @@
+@import '../../options/variables.scss';
+
+.button {
+  border: none;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &.close,
+  &.copy {
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &.copy {
+    color: $color-primary;
+  }
+
+  &.primary {
+    background-color: $color-primary;
+    color: $color-dark-white;
+    border: none;
+    border-radius: 5px;
+    padding: 14px 13.5px;
+    font-size: 14px;
+    line-height: 17px;
+    &:hover {
+      background-color: $color-primary-hover;
+    }
+    &:disabled {
+      background-color: $color-primary-disabled;
+    }
+  }
+}

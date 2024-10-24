@@ -1,0 +1,36 @@
+@import '../../../shared/options/variables.scss';
+
+.nav {
+  flex: 1;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  gap: 70px;
+  padding: 0;
+  margin: 0;
+}
+
+.navItem {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 13.5px;
+  text-align: left;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .navList {
+    gap: 20px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .navList {
+    flex-direction: column;
+  }
+}
