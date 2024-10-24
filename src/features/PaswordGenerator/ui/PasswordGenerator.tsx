@@ -42,7 +42,7 @@ export const PasswordGenerator: React.FC = () => {
     if (!isNoRepeatMustBeActive && options.noRepeat) {
       setOptions({ ...options, noRepeat: false });
     }
-  }, [options, length]);
+  }, [isNoRepeatMustBeActive, options]);
 
   const handlerChangeOptions = (option: keyof PasswordOptions) => {
     setOptions({ ...options, [option]: !options[option] });

@@ -31,7 +31,7 @@ export const getNewPassword = (
   length: number,
   options: PasswordOptions
 ): string => {
-  let availableChars = getAvailableChars(options);
+  const availableChars = getAvailableChars(options);
   let password = '';
 
   const usedChars = new Set();
