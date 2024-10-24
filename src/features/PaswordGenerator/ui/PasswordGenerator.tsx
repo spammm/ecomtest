@@ -1,8 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Checkbox, Input } from '@/shared/ui';
 import { PasswordList } from './PasswordList';
-import { getNewPassword, PasswordOptions } from '../utils/getNewPassword';
+import {
+  getAvailableChars,
+  getNewPassword,
+  PasswordOptions,
+} from '../utils/getNewPassword';
 import styles from './PasswordGenerator.module.scss';
 
 export const PasswordGenerator: React.FC = () => {
@@ -14,14 +18,34 @@ export const PasswordGenerator: React.FC = () => {
     symbols: false,
     noRepeat: false,
   });
+  //Максимально возможное количество символов для опции NoRepeat
+  const [maxCount, setMaxCount] = useState<number>(
+    getAvailableChars(options).length
+  );
   const [passwords, setPasswords] = useState<string[]>([]);
 
   const isHasOptions =
     options.upper || options.lower || options.numbers || options.symbols;
 
+  const isNoRepeatMustBeActive = maxCount >= length;
+
   const handleGenerate = () => {
     const newPassword = getNewPassword(length, options);
     setPasswords([...passwords, newPassword]);
+  };
+
+  useEffect(() => {
+    setMaxCount(getAvailableChars(options).length);
+  }, [options]);
+
+  useEffect(() => {
+    if (!isNoRepeatMustBeActive && options.noRepeat) {
+      setOptions({ ...options, noRepeat: false });
+    }
+  }, [options, length]);
+
+  const handlerChangeOptions = (option: keyof PasswordOptions) => {
+    setOptions({ ...options, [option]: !options[option] });
   };
 
   return (
@@ -29,50 +53,42 @@ export const PasswordGenerator: React.FC = () => {
       <div className={styles.dashboard}>
         <Input
           className={styles.countInput}
-          label="Длина пароля(макс. 30):"
+          label={`Длина пароля:`}
           type="number"
           value={length}
           onChange={(e) => {
             const newLength = Number(e.target.value);
-            if (newLength <= 30) {
-              setLength(newLength);
-            }
+            setLength(newLength);
           }}
-          placeholder="Введите длину пароля, максимум 30 символов"
+          placeholder="Введите длину пароля"
           min="1"
-          max="30"
         />
         <div className={styles.checkboxes}>
           <Checkbox
             label="Использовать прописные буквы"
             checked={options.upper}
-            onChange={() => setOptions({ ...options, upper: !options.upper })}
+            onChange={() => handlerChangeOptions('upper')}
           />
           <Checkbox
             label="Использовать строчные буквы"
             checked={options.lower}
-            onChange={() => setOptions({ ...options, lower: !options.lower })}
+            onChange={() => handlerChangeOptions('lower')}
           />
           <Checkbox
             label="Использовать цифры"
             checked={options.numbers}
-            onChange={() =>
-              setOptions({ ...options, numbers: !options.numbers })
-            }
+            onChange={() => handlerChangeOptions('numbers')}
           />
           <Checkbox
             label="Использовать символы: %, *, ), ?, @, #, $, ~"
             checked={options.symbols}
-            onChange={() =>
-              setOptions({ ...options, symbols: !options.symbols })
-            }
+            onChange={() => handlerChangeOptions('symbols')}
           />
           <Checkbox
-            label="Избегать повторения символов"
+            label={`Избегать повторения символов(макс.симв. ${maxCount})`}
             checked={options.noRepeat}
-            onChange={() =>
-              setOptions({ ...options, noRepeat: !options.noRepeat })
-            }
+            onChange={() => handlerChangeOptions('noRepeat')}
+            disabled={!isNoRepeatMustBeActive}
           />
         </div>
 

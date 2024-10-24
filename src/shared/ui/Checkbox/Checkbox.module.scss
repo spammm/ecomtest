@@ -11,6 +11,21 @@
     position: absolute;
     opacity: 0;
     cursor: pointer;
+
+    &:checked + .customCheckbox {
+      background-color: $color-primary;
+      border-color: $color-primary;
+      background-image: url('/icons/checkmark.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 8px 6px;
+    }
+
+    &:disabled + .customCheckbox {
+      background-color: $color-light-gray;
+      border-color: $color-light-gray;
+      cursor: not-allowed;
+    }
   }
 
   .customCheckbox {
@@ -24,14 +39,5 @@
     justify-content: center;
     align-items: center;
     transition: background-color 0.3s ease, border-color 0.3s ease;
-  }
-
-  .checkboxInput:checked + .customCheckbox {
-    background-color: $color-primary;
-    border-color: $color-primary;
-    background-image: url('/icons/checkmark.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 8px 6px;
   }
 }

@@ -11,7 +11,9 @@ const PasswordList: React.FC<PasswordListProperty> = ({ list }) => {
       {list
         .map((item, index) => <PasswordListItem key={index} value={item} />)
         .reverse()}
-      {list.length === 0 && <p className={styles.empty}>No passwords</p>}
+      {list.length === 0 && (
+        <p className={styles.empty}>Нажмите кнопку "Сгенерировать пароль"</p>
+      )}
     </div>
   );
 };
